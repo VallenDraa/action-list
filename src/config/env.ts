@@ -8,7 +8,10 @@ export const env = createEnv({
 	 * Will throw if you access these variables on the client.
 	 */
 	server: {
+		NODE_ENV: z.enum(['development', 'production', 'test']),
 		MONGO_URI: z.string().url(),
+		PW_SALT: z.string().min(1),
+		PW_SECRET: z.string().min(1),
 	},
 	/*
 	 * Environment variables available on the client (and server).
@@ -23,6 +26,9 @@ export const env = createEnv({
 	 * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
 	 */
 	runtimeEnv: {
+		NODE_ENV: process.env.NODE_ENV,
 		MONGO_URI: process.env.MONGO_URI,
+		PW_SALT: process.env.PW_SALT,
+		PW_SECRET: process.env.PW_SECRET,
 	},
 });
