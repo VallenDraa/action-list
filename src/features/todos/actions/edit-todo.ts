@@ -5,12 +5,18 @@ import { TodoModel } from '../models/todo-model';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { updateTodoValidator } from '../validators/todo-validator';
 import { Todo, UpdateTodo } from '../types/todo-type';
+import { validateRequest } from '@/lib/lucia';
 
 export async function createTodoAction(
 	todoId: string,
 	todo: UpdateTodo,
 ): Promise<Response<{ todo: Todo } | null>> {
 	try {
+		const { session } = await validateRequest();
+		if (!session) {
+			return { ok: false, message: 'Unauthorized', data: null };
+		}
+
 		const validatedTodoId = await updateTodoValidator.parseAsync(todoId);
 		const validatedTodo = await updateTodoValidator.parseAsync(todo);
 

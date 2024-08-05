@@ -10,12 +10,18 @@ import { idValidator } from '@/features/shared/validators/id-validator';
 import { getTodoValidator } from '../validators/get-todos-validator';
 import { GetTodosActionQuery } from '../types/get-todos-type';
 import { Todo } from '../types/todo-type';
+import { validateRequest } from '@/lib/lucia';
 
 export async function getTodosAction(
 	userId: string,
 	{ limit = 10, page = 1, search = '' }: GetTodosActionQuery,
 ): Promise<PaginatedResponse<{ todos: Todo[] }> | Response<null>> {
 	try {
+		const { session } = await validateRequest();
+		if (!session) {
+			return { ok: false, message: 'Unauthorized', data: null };
+		}
+
 		const validatedUserId = await idValidator.parseAsync(userId);
 		const validatedQuery = await getTodoValidator.parseAsync({
 			limit,
