@@ -1,6 +1,6 @@
 'use server';
 
-import { Response } from '@/features/shared/types/response-types';
+import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { lucia, validateRequest } from '@/lib/lucia';
 import { cookies } from 'next/headers';

@@ -1,6 +1,6 @@
 import z from 'zod';
 import { MongooseError } from 'mongoose';
-import { Response } from '../types/response-types';
+import { Response } from '../types/response-type';
 
 export const UNAUTHED_PAGE_VISIT_MESSAGE =
 	'You are not authenticated, please login or register first to access this page!';

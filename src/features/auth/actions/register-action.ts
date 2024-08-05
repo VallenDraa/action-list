@@ -7,7 +7,7 @@ import { env } from '@/config/env';
 import { isUserExists } from '../utils/is-user-exists';
 import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
-import { Response } from '@/features/shared/types/response-types';
+import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 
 export async function registerAction(

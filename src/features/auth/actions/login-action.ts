@@ -6,7 +6,7 @@ import { loginValidator } from '../validators/auth-validator';
 import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
 import { env } from '@/config/env';
-import { Response } from '@/features/shared/types/response-types';
+import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 
 export async function loginAction(
