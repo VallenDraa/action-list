@@ -2,29 +2,29 @@
 
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import { loginAction } from '../actions/login-action';
+import { registerAction } from '../actions/register-action';
 import React from 'react';
 import { Toast } from '@/features/shared/components/ui/toast';
 import { useForm } from 'react-hook-form';
-import { Login } from '../types/auth-type';
+import { Register } from '../types/auth-type';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginValidator } from '../validators/auth-validator';
+import { registerValidator } from '../validators/auth-validator';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { Button } from '@/features/shared/components/ui/button';
 import Link from 'next/link';
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
 	const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 	const [toastType, setToastType] = React.useState<string>('light');
 
-	const form = useForm<Login>({
+	const form = useForm<Register>({
 		defaultValues: { username: '', password: '' },
-		resolver: zodResolver(loginValidator),
+		resolver: zodResolver(registerValidator),
 	});
 
-	const onSubmit = async (data: Login) => {
+	const onSubmit = async (data: Register) => {
 		try {
-			const response = await loginAction(data);
+			const response = await registerAction(data);
 
 			setToastType(!response.ok ? 'danger' : 'light');
 			setToastMessage(response.message);
@@ -47,9 +47,9 @@ export const LoginForm = () => {
 			<Card>
 				<Card.Body>
 					<div className="text-center">
-						<Card.Title className="fs-4 fw-bold mb-3">Login Form</Card.Title>
+						<Card.Title className="fs-4 fw-bold mb-3">Register Form</Card.Title>
 						<Card.Subtitle className="text-muted">
-							Login to continue to TooDoo
+							Register to continue to TooDoo
 						</Card.Subtitle>
 					</div>
 
@@ -93,14 +93,14 @@ export const LoginForm = () => {
 							variant="primary"
 							type="submit"
 						>
-							Login
+							Register
 						</Button>
 					</Form>
 
 					<div className="d-flex align-align-items-center justify-content-center gap-1">
-						<p>Don&apos;t have an account? </p>
-						<Link href="/auth/register" className="w-auto p-0 btn btn-link">
-							Register here.
+						<p>Have an account? </p>
+						<Link href="/auth/login" className="w-auto p-0 btn btn-link">
+							Login here.
 						</Link>
 					</div>
 				</Card.Body>
