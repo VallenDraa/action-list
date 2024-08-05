@@ -6,4 +6,5 @@ const SessionSchema = new mongoose.Schema<Session>({
 	expires_at: { type: Date, required: true },
 });
 
-export const SessionModel = mongoose.model('session', SessionSchema);
+export const SessionModel: mongoose.Model<Session> =
+	mongoose.models.session || mongoose.model('session', SessionSchema);
