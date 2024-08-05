@@ -11,21 +11,15 @@ import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { User } from '../types/user-type';
 import { dbConnect } from '@/lib/mongoose';
+import { Register } from '../types/auth-type';
 
 export async function registerAction(
-	_: any,
-	formData: FormData,
+	registerData: Register,
 ): Promise<Response<null | { user: User }>> {
 	try {
 		await dbConnect();
 
-		const username = formData.get('username');
-		const password = formData.get('password');
-
-		const validatedData = await registerValidator.parseAsync({
-			username,
-			password,
-		});
+		const validatedData = await registerValidator.parseAsync(registerData);
 
 		const userExists = await isUserExists(validatedData.username);
 		if (userExists) {

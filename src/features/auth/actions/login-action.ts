@@ -10,21 +10,15 @@ import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { User } from '../types/user-type';
 import { dbConnect } from '@/lib/mongoose';
+import { Login } from '../types/auth-type';
 
 export async function loginAction(
-	_: any,
-	formData: FormData,
+	loginData: Login,
 ): Promise<Response<null | { user: User }>> {
 	try {
 		await dbConnect();
 
-		const username = formData.get('username');
-		const password = formData.get('password');
-
-		const validatedData = await loginValidator.parseAsync({
-			username,
-			password,
-		});
+		const validatedData = await loginValidator.parseAsync(loginData);
 
 		const user = await UserModel.findOne({
 			username: validatedData.username,
