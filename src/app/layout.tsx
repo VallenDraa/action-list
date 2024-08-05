@@ -1,4 +1,6 @@
-import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { Providers } from '@/features/shared/components/providers';
+
+import './globals.css';
 
 export const metadata = { title: 'TooDoo' };
 
@@ -10,7 +12,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<AntdRegistry>{children}</AntdRegistry>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);
