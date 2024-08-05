@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginValidator } from '../validators/auth-validator';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { Button } from '@/features/shared/components/ui/button';
+import Link from 'next/link';
 
 export const LoginForm = () => {
 	const [toastMessage, setToastMessage] = React.useState<string | null>(null);
@@ -98,15 +99,9 @@ export const LoginForm = () => {
 
 					<div className="d-flex align-align-items-center justify-content-center gap-1">
 						<p>Don&apos;t have an account? </p>
-						<Button
-							href="/auth/register"
-							disabled={form.formState.isSubmitting}
-							className="w-auto p-0"
-							variant="link"
-							type="button"
-						>
+						<Link href="/auth/register" className="w-auto p-0 btn btn-link">
 							Register here.
-						</Button>
+						</Link>
 					</div>
 				</Card.Body>
 			</Card>
