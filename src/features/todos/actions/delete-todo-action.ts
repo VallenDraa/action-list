@@ -5,11 +5,14 @@ import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { idValidator } from '@/features/shared/validators/id-validator';
 import { TodoModel } from '../models/todo-model';
 import { validateRequest } from '@/lib/lucia';
+import { dbConnect } from '@/lib/mongoose';
 
 export async function deleteTodoAction(
 	todoId: string,
 ): Promise<Response<null>> {
 	try {
+		await dbConnect();
+
 		const { session } = await validateRequest();
 		if (!session) {
 			return { ok: false, message: 'Unauthorized', data: null };

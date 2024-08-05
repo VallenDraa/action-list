@@ -6,12 +6,15 @@ import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { updateTodoValidator } from '../validators/todo-validator';
 import { Todo, UpdateTodo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
+import { dbConnect } from '@/lib/mongoose';
 
 export async function createTodoAction(
 	todoId: string,
 	todo: UpdateTodo,
 ): Promise<Response<{ todo: Todo } | null>> {
 	try {
+		await dbConnect();
+
 		const { session } = await validateRequest();
 		if (!session) {
 			return { ok: false, message: 'Unauthorized', data: null };

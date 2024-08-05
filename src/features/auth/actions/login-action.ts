@@ -9,12 +9,15 @@ import { env } from '@/config/env';
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { User } from '../types/user-type';
+import { dbConnect } from '@/lib/mongoose';
 
 export async function loginAction(
 	_: any,
 	formData: FormData,
 ): Promise<Response<null | { user: User }>> {
 	try {
+		await dbConnect();
+
 		const username = formData.get('username');
 		const password = formData.get('password');
 

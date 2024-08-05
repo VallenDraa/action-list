@@ -11,12 +11,15 @@ import { getTodoValidator } from '../validators/get-todos-validator';
 import { GetTodosActionQuery } from '../types/get-todos-type';
 import { Todo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
+import { dbConnect } from '@/lib/mongoose';
 
 export async function getTodosAction(
 	userId: string,
 	{ limit = 10, page = 1, search = '' }: GetTodosActionQuery,
 ): Promise<PaginatedResponse<{ todos: Todo[] }> | Response<null>> {
 	try {
+		await dbConnect();
+
 		const { session } = await validateRequest();
 		if (!session) {
 			return { ok: false, message: 'Unauthorized', data: null };

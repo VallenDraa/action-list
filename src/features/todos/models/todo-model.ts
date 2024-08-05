@@ -1,8 +1,5 @@
-import mongoose, { InferRawDocType } from 'mongoose';
-import { dbConnect } from '@/lib/mongoose';
+import mongoose from 'mongoose';
 import { Todo } from '../types/todo-type';
-
-await dbConnect();
 
 const TodoSchema = new mongoose.Schema<Todo>(
 	{
