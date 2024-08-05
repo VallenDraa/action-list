@@ -1,5 +1,4 @@
 import z from 'zod';
-import { MongooseError } from 'mongoose';
 import { Response } from '../types/response-type';
 
 export const UNAUTHED_PAGE_VISIT_MESSAGE =
@@ -11,16 +10,16 @@ export function getErrorMessage(
 	err: unknown,
 	defaultError = DEFAULT_ERROR_MESSAGE,
 ) {
-	if (err instanceof MongooseError) {
-		return err.message;
-	}
-
 	if (isErrorResponse(err)) {
 		return err.message;
 	}
 
 	if (err instanceof z.ZodError) {
 		return flattenZodError(err);
+	}
+
+	if (err instanceof Error) {
+		return err.message;
 	}
 
 	return defaultError;

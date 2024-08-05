@@ -26,10 +26,7 @@ export async function registerAction(
 			return { ok: false, message: 'Username is already used.', data: null };
 		}
 
-		const passwordHash = await hash(validatedData.password, {
-			salt: env.PW_SALT,
-			secret: env.PW_SECRET,
-		});
+		const passwordHash = await hash(validatedData.password);
 
 		const user = await UserModel.create({
 			username: validatedData.username,

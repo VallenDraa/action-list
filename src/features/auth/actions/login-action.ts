@@ -28,9 +28,7 @@ export async function loginAction(
 			return { ok: false, message: 'Invalid username or password', data: null };
 		}
 
-		const passwordMatch = await verify(validatedData.password, user.password, {
-			secret: env.PW_SECRET,
-		});
+		const passwordMatch = await verify(user.password, validatedData.password);
 
 		if (!passwordMatch) {
 			return { ok: false, message: 'Invalid username or password', data: null };
