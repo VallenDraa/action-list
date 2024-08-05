@@ -12,8 +12,11 @@ import { loginValidator } from '../validators/auth-validator';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { Button } from '@/features/shared/components/ui/button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
+	const router = useRouter();
+
 	const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 	const [toastType, setToastType] = React.useState<string>('light');
 
@@ -26,8 +29,11 @@ export const LoginForm = () => {
 		try {
 			const response = await loginAction(data);
 
-			setToastType(!response.ok ? 'danger' : 'light');
-			setToastMessage(response.message);
+			if (response.ok) {
+				router.push('/');
+			} else {
+				throw new Error(response.message);
+			}
 		} catch (error) {
 			setToastType('danger');
 			setToastMessage(getErrorMessage(error));

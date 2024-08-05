@@ -6,7 +6,7 @@ import { lucia, validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { cookies } from 'next/headers';
 
-export async function logout(): Promise<Response<null>> {
+export async function logoutAction(): Promise<Response<null>> {
 	try {
 		await dbConnect();
 

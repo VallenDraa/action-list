@@ -5,7 +5,7 @@ export type AuthLayoutProps = {
 	children: React.ReactNode;
 };
 
-export default function AuthLayout(props: AuthLayoutProps) {
+export default async function AuthLayout(props: AuthLayoutProps) {
 	return (
 		<Container fluid>
 			<Row className="align-items-center justify-content-center min-vh-100">

@@ -1,8 +1,8 @@
-import { Button } from 'antd';
+import { Button } from '@/features/shared/components/ui/button';
 
 export default function Home() {
 	return (
-		<Button type="primary" size="large">
+		<Button variant="primary" size="lg">
 			hello
 		</Button>
 	);

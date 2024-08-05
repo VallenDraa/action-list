@@ -25,24 +25,21 @@ export const lucia = new Lucia(luciaAdapter, {
 export const validateRequest = cache(async () => {
 	const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 	if (!sessionId) {
-		return {
-			user: null,
-			session: null,
-		};
+		return { user: null, session: null };
 	}
 
-	const result = await lucia.validateSession(sessionId);
+	const { user, session } = await lucia.validateSession(sessionId);
 
 	try {
-		if (result.session && result.session.fresh) {
-			const sessionCookie = lucia.createSessionCookie(result.session.id);
+		if (session && session.fresh) {
+			const sessionCookie = lucia.createSessionCookie(session.id);
 			cookies().set(
 				sessionCookie.name,
 				sessionCookie.value,
 				sessionCookie.attributes,
 			);
 		}
-		if (!result.session) {
+		if (!session) {
 			const sessionCookie = lucia.createBlankSessionCookie();
 			cookies().set(
 				sessionCookie.name,
@@ -51,10 +48,10 @@ export const validateRequest = cache(async () => {
 			);
 		}
 	} catch {
-		// TODO: handle auth request validation error
+		// Next.js throws error when attempting to set cookies when rendering page
 	}
 
-	return result;
+	return { user, session };
 });
 
 declare module 'lucia' {

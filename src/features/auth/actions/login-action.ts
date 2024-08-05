@@ -5,7 +5,6 @@ import { UserModel } from '../models/user-model';
 import { loginValidator } from '../validators/auth-validator';
 import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
-import { env } from '@/config/env';
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { User } from '../types/user-type';
@@ -34,7 +33,7 @@ export async function loginAction(
 			return { ok: false, message: 'Invalid username or password', data: null };
 		}
 
-		const session = await lucia.createSession(user._id.toString(), {});
+		const session = await lucia.createSession(user._id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
 		cookies().set(
@@ -43,7 +42,13 @@ export async function loginAction(
 			sessionCookie.attributes,
 		);
 
-		return { ok: true, message: 'Login successfully', data: { user } };
+		return {
+			ok: true,
+			message: 'Login successfully',
+			data: {
+				user: { ...user, _id: user._id.toString() },
+			},
+		};
 	} catch (error) {
 		console.error('🚀 ~ error:', error);
 		return { ok: false, message: getErrorMessage(error), data: null };

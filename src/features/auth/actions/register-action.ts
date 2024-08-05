@@ -42,7 +42,11 @@ export async function registerAction(
 			sessionCookie.attributes,
 		);
 
-		return { ok: true, message: 'Registration successful.', data: { user } };
+		return {
+			ok: true,
+			message: 'Registration successful.',
+			data: { user: { ...user, _id: user._id.toString() } },
+		};
 	} catch (error) {
 		console.error('🚀 ~ error:', error);
 		return { ok: false, message: getErrorMessage(error), data: null };
