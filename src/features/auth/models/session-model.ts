@@ -1,12 +1,8 @@
 import mongoose from 'mongoose';
 import { dbConnect } from '@/lib/mongoose';
+import { Session } from '../types/session-type';
 
 await dbConnect();
-
-export type Session = {
-	user_id: string;
-	expires_at: Date;
-};
 
 const SessionSchema = new mongoose.Schema<Session>({
 	user_id: { type: String, required: true },

@@ -1,18 +1,19 @@
 'use server';
 
 import { verify } from 'argon2';
-import { User, UserModel } from '../models/user-model';
+import { UserModel } from '../models/user-model';
 import { loginValidator } from '../validators/auth-validator';
 import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
 import { env } from '@/config/env';
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
+import { User } from '../types/user-type';
 
 export async function loginAction(
 	_: any,
 	formData: FormData,
-): Promise<Response<null | User>> {
+): Promise<Response<null | { user: User }>> {
 	try {
 		const username = formData.get('username');
 		const password = formData.get('password');
@@ -22,7 +23,9 @@ export async function loginAction(
 			password,
 		});
 
-		const user = await UserModel.findOne({ username: validatedData.username });
+		const user = await UserModel.findOne({
+			username: validatedData.username,
+		}).lean();
 
 		if (user === null) {
 			return { ok: false, message: 'Invalid username or password', data: null };
@@ -45,7 +48,7 @@ export async function loginAction(
 			sessionCookie.attributes,
 		);
 
-		return { ok: true, message: 'Login successfully', data: user };
+		return { ok: true, message: 'Login successfully', data: { user } };
 	} catch (error) {
 		console.error('🚀 ~ error:', error);
 		return { ok: false, message: getErrorMessage(error), data: null };

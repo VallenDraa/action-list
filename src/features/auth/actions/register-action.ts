@@ -1,6 +1,6 @@
 'use server';
 
-import { User, UserModel } from '../models/user-model';
+import { UserModel } from '../models/user-model';
 import { hash } from 'argon2';
 import { registerValidator } from '../validators/auth-validator';
 import { env } from '@/config/env';
@@ -9,11 +9,12 @@ import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
+import { User } from '../types/user-type';
 
 export async function registerAction(
 	_: any,
 	formData: FormData,
-): Promise<Response<null | User>> {
+): Promise<Response<null | { user: User }>> {
 	try {
 		const username = formData.get('username');
 		const password = formData.get('password');
@@ -47,7 +48,7 @@ export async function registerAction(
 			sessionCookie.attributes,
 		);
 
-		return { ok: true, message: 'Registration successful.', data: user };
+		return { ok: true, message: 'Registration successful.', data: { user } };
 	} catch (error) {
 		console.error('🚀 ~ error:', error);
 		return { ok: false, message: getErrorMessage(error), data: null };

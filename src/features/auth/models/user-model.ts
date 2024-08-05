@@ -1,12 +1,8 @@
 import mongoose from 'mongoose';
 import { dbConnect } from '@/lib/mongoose';
+import { User } from '../types/user-type';
 
 await dbConnect();
-
-export type User = {
-	username: string;
-	password: string;
-};
 
 const UserSchema = new mongoose.Schema<User>(
 	{
