@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
 import { Lucia, TimeSpan } from 'lucia';
 import { cookies } from 'next/headers';
