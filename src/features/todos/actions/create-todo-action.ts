@@ -7,6 +7,7 @@ import { todoValidator } from '../validators/todo-validator';
 import { Todo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
+import { createTodoService } from '../services/create-todo-service';
 
 export async function createTodoAction(
 	todo: Todo,
@@ -20,7 +21,7 @@ export async function createTodoAction(
 		}
 
 		const validatedTodo = await todoValidator.parseAsync(todo);
-		const newTodo = await TodoModel.create(validatedTodo);
+		const newTodo = await createTodoService(validatedTodo);
 
 		return { ok: true, message: 'Todo created.', data: { todo: newTodo } };
 	} catch (error) {

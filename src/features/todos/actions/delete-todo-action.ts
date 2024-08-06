@@ -6,6 +6,7 @@ import { idValidator } from '@/features/shared/validators/id-validator';
 import { TodoModel } from '../models/todo-model';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
+import { deleteTodoService } from '../services/delete-todo-service';
 
 export async function deleteTodoAction(
 	todoId: string,
@@ -19,7 +20,7 @@ export async function deleteTodoAction(
 		}
 
 		const validatedTodoId = await idValidator.parseAsync(todoId);
-		await TodoModel.findByIdAndDelete(validatedTodoId);
+		await deleteTodoService(validatedTodoId);
 
 		return { ok: true, message: 'Todo deleted.', data: null };
 	} catch (error) {
