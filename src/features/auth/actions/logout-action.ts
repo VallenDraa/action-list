@@ -5,6 +5,7 @@ import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { lucia, validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { cookies } from 'next/headers';
+import { logoutService } from '../services/logout-service';
 
 export async function logoutAction(): Promise<Response<null>> {
 	try {
@@ -15,9 +16,7 @@ export async function logoutAction(): Promise<Response<null>> {
 			return { ok: false, message: 'Unauthorized', data: null };
 		}
 
-		await lucia.invalidateSession(session.id);
-
-		const sessionCookie = lucia.createBlankSessionCookie();
+		const sessionCookie = await logoutService(session);
 
 		cookies().set(
 			sessionCookie.name,

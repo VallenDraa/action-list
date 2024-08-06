@@ -10,6 +10,7 @@ import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { PasswordLessUser } from '../types/user-type';
 import { dbConnect } from '@/lib/mongoose';
 import { Login } from '../types/auth-type';
+import { loginService } from '../services/login-service';
 
 export async function loginAction(
 	loginData: Login,
@@ -19,26 +20,12 @@ export async function loginAction(
 
 		const validatedData = await loginValidator.parseAsync(loginData);
 
-		const userResult = await UserModel.findOne({
-			username: validatedData.username,
-		}).lean();
-
-		if (userResult === null) {
+		const data = await loginService(validatedData);
+		if (!data) {
 			return { ok: false, message: 'Invalid username or password', data: null };
 		}
 
-		const passwordMatch = await verify(
-			userResult.password,
-			validatedData.password,
-		);
-
-		if (!passwordMatch) {
-			return { ok: false, message: 'Invalid username or password', data: null };
-		}
-
-		const { password, ...user } = userResult;
-
-		const session = await lucia.createSession(user._id, {});
+		const session = await lucia.createSession(data.user._id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
 		cookies().set(
@@ -50,7 +37,7 @@ export async function loginAction(
 		return {
 			ok: true,
 			message: 'Login successfully',
-			data: { user: { ...user, _id: user._id.toString() } },
+			data: { user: { ...data.user, _id: data.user._id.toString() } },
 		};
 	} catch (error) {
 		console.error('🚀 ~ error:', error);

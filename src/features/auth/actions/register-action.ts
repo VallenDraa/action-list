@@ -11,6 +11,7 @@ import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { PasswordLessUser } from '../types/user-type';
 import { dbConnect } from '@/lib/mongoose';
 import { Register } from '../types/auth-type';
+import { registerService } from '../services/register-service';
 
 export async function registerAction(
 	registerData: Register,
@@ -20,31 +21,21 @@ export async function registerAction(
 
 		const validatedData = await registerValidator.parseAsync(registerData);
 
-		const userExists = await isUserExists(validatedData.username);
-		if (userExists) {
+		const data = await registerService(validatedData);
+		if (!data) {
 			return { ok: false, message: 'Username is already used.', data: null };
 		}
 
-		const passwordHash = await hash(validatedData.password);
-
-		const { password, ...user } = await UserModel.create({
-			username: validatedData.username,
-			password: passwordHash,
-		}).then(user => user.toObject());
-
-		const session = await lucia.createSession(user._id, {});
-		const sessionCookie = lucia.createSessionCookie(session.id);
-
 		cookies().set(
-			sessionCookie.name,
-			sessionCookie.value,
-			sessionCookie.attributes,
+			data.sessionCookie.name,
+			data.sessionCookie.value,
+			data.sessionCookie.attributes,
 		);
 
 		return {
 			ok: true,
 			message: 'Registration successful.',
-			data: { user: { ...user, _id: user._id.toString() } },
+			data: { user: { ...data.user, _id: data.user._id.toString() } },
 		};
 	} catch (error) {
 		console.error('🚀 ~ error:', error);
