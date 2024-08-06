@@ -3,8 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { Navigations } from '@/features/shared/components/ui/navigations';
-import { validateRequest } from '@/lib/lucia';
-import { redirect } from 'next/navigation';
+import { validateRequestWithRedirect } from '@/lib/lucia';
 import { CreateTodoButton } from '@/features/todos/components/create-todo/create-todo-button';
 
 export type ProtectedLayoutProps = {
@@ -13,11 +12,7 @@ export type ProtectedLayoutProps = {
 
 // TODO: validate session via middleware. Lucia docs doesn't show how to do this, so still need more research.
 export default async function ProtectedLayout(props: ProtectedLayoutProps) {
-	const { user } = await validateRequest();
-
-	if (!user) {
-		return redirect('/auth/login');
-	}
+	await validateRequestWithRedirect();
 
 	return (
 		<Container fluid>

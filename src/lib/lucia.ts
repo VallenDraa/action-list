@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
-import { Lucia, TimeSpan } from 'lucia';
+import { Lucia, Session, TimeSpan, User } from 'lucia';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 import { dbConnect } from './mongoose';
+import { redirect } from 'next/navigation';
 
 export const luciaAdapter = new MongodbAdapter(
 	mongoose.connection.collection('sessions'),
@@ -56,6 +57,16 @@ export const validateRequest = cache(async () => {
 
 	return { user, session };
 });
+
+export const validateRequestWithRedirect = async (path = '/auth/login') => {
+	const req = await validateRequest();
+
+	if (!req.user || !req.session) {
+		return redirect(path);
+	}
+
+	return req as { user: User; session: Session };
+};
 
 declare module 'lucia' {
 	interface Register {
