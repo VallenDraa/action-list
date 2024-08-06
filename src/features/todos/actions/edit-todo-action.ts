@@ -8,7 +8,7 @@ import { Todo, UpdateTodo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 
-export async function createTodoAction(
+export async function editTodoAction(
 	todoId: string,
 	todo: UpdateTodo,
 ): Promise<Response<{ todo: Todo } | null>> {
