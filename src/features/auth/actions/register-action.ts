@@ -3,19 +3,18 @@
 import { UserModel } from '../models/user-model';
 import { hash } from 'argon2';
 import { registerValidator } from '../validators/auth-validator';
-import { env } from '@/config/env';
 import { isUserExists } from '../utils/is-user-exists';
 import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
-import { User } from '../types/user-type';
+import { PasswordLessUser } from '../types/user-type';
 import { dbConnect } from '@/lib/mongoose';
 import { Register } from '../types/auth-type';
 
 export async function registerAction(
 	registerData: Register,
-): Promise<Response<null | { user: User }>> {
+): Promise<Response<null | { user: PasswordLessUser }>> {
 	try {
 		await dbConnect();
 
@@ -28,12 +27,12 @@ export async function registerAction(
 
 		const passwordHash = await hash(validatedData.password);
 
-		const user = await UserModel.create({
+		const { password, ...user } = await UserModel.create({
 			username: validatedData.username,
 			password: passwordHash,
-		});
+		}).then(user => user.toObject());
 
-		const session = await lucia.createSession(user._id.toString(), {});
+		const session = await lucia.createSession(user._id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
 		cookies().set(
