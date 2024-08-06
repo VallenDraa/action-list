@@ -8,3 +8,4 @@ export type Todo = {
 };
 
 export type UpdateTodo = Omit<Todo, '_id'>;
+export type CreateTodo = UpdateTodo;

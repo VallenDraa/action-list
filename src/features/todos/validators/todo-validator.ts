@@ -12,4 +12,5 @@ export const todoValidator: toZod<Todo> = z.object({
 	is_archived: z.boolean(),
 });
 
+export const createTodoValidator = todoValidator.omit({ _id: true });
 export const updateTodoValidator = todoValidator.omit({ _id: true });
