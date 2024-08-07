@@ -14,7 +14,7 @@ export const TodoStatusPicker = (props: TodoStatusPickerProps) => {
 	const { activeType, onChange } = props;
 
 	return (
-		<Dropdown align="end">
+		<Dropdown align="start">
 			<Dropdown.Toggle
 				variant="primary"
 				className="d-flex align-items-center justify-content-center gap-1"
