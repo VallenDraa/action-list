@@ -22,8 +22,10 @@ export const generatePages = ({
 		}
 	}
 
-	return Array.from(
+	const result = Array.from(
 		{ length: endPage - startPage + 1 },
 		(_, i) => startPage + i,
 	);
+
+	return result.length > 0 ? result : [1];
 };
