@@ -37,14 +37,12 @@ export const TodosSection = (props: TodosSectionProps) => {
 		data: todosResponse,
 		pages,
 		totalPages,
-		isLoading,
+		isLoadingData,
 	} = useGetPaginatedTodos(userId, {
 		...dataQuery,
 		type: todoStatus as TodoFilter,
 	});
 	const { handleDeleteTodo, handleEditTodo } = useUpdateTodo(userId, dataQuery);
-
-	const isLoadingData = isLoading || !todosResponse;
 
 	return (
 		<>

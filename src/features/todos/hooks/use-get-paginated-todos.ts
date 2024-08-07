@@ -33,5 +33,7 @@ export const useGetPaginatedTodos = (
 		}
 	}, [data?.pagination.totalPages]);
 
-	return { data, pages, totalData, totalPages, ...rest };
+	const isLoadingData = rest.isLoading || !data;
+
+	return { data, pages, totalData, totalPages, isLoadingData, ...rest };
 };
