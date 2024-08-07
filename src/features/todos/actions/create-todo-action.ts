@@ -2,7 +2,6 @@
 
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
-import { createTodoValidator } from '../validators/todo-validator';
 import { CreateTodo, Todo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
@@ -19,8 +18,7 @@ export async function createTodoAction(
 			return { ok: false, message: 'Unauthorized', data: null };
 		}
 
-		const validatedTodo = await createTodoValidator.parseAsync(todo);
-		const newTodo = await createTodoService(validatedTodo);
+		const newTodo = await createTodoService(todo);
 
 		return {
 			ok: true,

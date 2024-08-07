@@ -19,8 +19,7 @@ export async function deleteTodoAction(
 			return { ok: false, message: 'Unauthorized', data: null };
 		}
 
-		const validatedTodoId = await idValidator.parseAsync(todoId);
-		await deleteTodoService(validatedTodoId);
+		await deleteTodoService(todoId);
 
 		return { ok: true, message: 'Todo deleted.', data: null };
 	} catch (error) {

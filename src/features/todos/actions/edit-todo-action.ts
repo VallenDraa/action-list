@@ -6,8 +6,6 @@ import { Todo, UpdateTodo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { editTodoService } from '../services/edit-todo-service';
-import { idValidator } from '@/features/shared/validators/id-validator';
-import { todoValidator } from '../validators/todo-validator';
 
 export async function editTodoAction({
 	todo,
@@ -24,10 +22,7 @@ export async function editTodoAction({
 			return { ok: false, message: 'Unauthorized', data: null };
 		}
 
-		const validatedTodoId = await idValidator.parseAsync(todoId);
-		const validatedTodo = await todoValidator.parseAsync(todo);
-
-		const updatedTodo = await editTodoService(validatedTodoId, validatedTodo);
+		const updatedTodo = await editTodoService(todoId, todo);
 
 		if (!updatedTodo) {
 			return { ok: false, message: 'Todo not found.', data: null };
