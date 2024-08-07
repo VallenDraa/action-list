@@ -1,7 +1,8 @@
 'use client';
 
+import * as React from 'react';
 import Modal, { ModalProps } from 'react-bootstrap/Modal';
-import { CreateTodo, Todo } from '@/features/todos/types/todo-type';
+import { CreateTodo, Todo, TodoStatus } from '@/features/todos/types/todo-type';
 import { Button } from '@/features/shared/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +15,7 @@ export type TodoFormProps = {
 	userId: string;
 	onSubmit: (newTodo: CreateTodo) => void | Promise<void>;
 	onClose: () => void;
-	defaultValues?: Todo;
+	defaultTodo?: Todo;
 } & ModalProps;
 
 export const TodoForm = (props: TodoFormProps) => {
@@ -24,24 +25,35 @@ export const TodoForm = (props: TodoFormProps) => {
 		onSubmit,
 		onClose,
 		onBackdropClick,
-		defaultValues,
+		defaultTodo,
 		...rest
 	} = props;
 
+	const defaultValues = React.useMemo(
+		() =>
+			defaultTodo ?? {
+				title: '',
+				body: '',
+				user_id: userId,
+				status: 'upcoming' as TodoStatus,
+			},
+		[defaultTodo, userId],
+	);
+
 	const form = useForm<CreateTodo>({
 		resolver: zodResolver(createTodoValidator),
-		defaultValues: defaultValues ?? {
-			title: '',
-			body: '',
-			user_id: userId,
-			status: 'upcoming',
-		},
+		defaultValues,
 	});
 
 	const handleSubmit = async (newTodo: CreateTodo) => {
 		await onSubmit(newTodo);
-		form.reset();
 	};
+
+	React.useEffect(() => {
+		if (form.formState.isSubmitSuccessful) {
+			form.reset(defaultValues);
+		}
+	}, [form, defaultValues]);
 
 	return (
 		<Modal {...rest}>

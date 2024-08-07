@@ -24,11 +24,10 @@ export const TodoItem = (props: TodoItemProps) => {
 
 	const handleEdit = (newTodo: CreateTodo) => {
 		onEdit({ ...todo, ...newTodo });
+		setIsEditingTodo(false);
 	};
 
-	const handleDelete = () => {
-		onDelete(todo._id);
-	};
+	const handleDelete = () => onDelete(todo._id);
 
 	return (
 		<Card>
@@ -51,7 +50,7 @@ export const TodoItem = (props: TodoItemProps) => {
 
 					<TodoForm
 						show={isEditingTodo}
-						defaultValues={todo}
+						defaultTodo={todo}
 						userId={todo.user_id}
 						onSubmit={handleEdit}
 						title="Edit Todo Form"
