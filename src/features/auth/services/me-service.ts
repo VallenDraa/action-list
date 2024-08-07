@@ -1,10 +1,8 @@
 import 'server-only';
 
-import { validateRequest } from '@/lib/lucia';
+import { User } from 'lucia';
 
-export const meService = async () => {
-	const { user } = await validateRequest();
-
+export const meService = async (user: User) => {
 	if (!user) {
 		throw new Error('Unauthorized!');
 	}
