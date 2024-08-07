@@ -1,25 +1,35 @@
 'use client';
 
 import Modal, { ModalProps } from 'react-bootstrap/Modal';
-import { CreateTodo } from '@/features/todos/types/todo-type';
+import { CreateTodo, Todo } from '@/features/todos/types/todo-type';
 import { Button } from '@/features/shared/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTodoValidator } from '@/features/todos/validators/todo-validator';
 import { Form } from 'react-bootstrap';
 
-export type CreateTodoFormProps = {
+export type TodoFormProps = {
+	title?: string;
 	userId: string;
 	onSubmit: (newTodo: CreateTodo) => void | Promise<void>;
 	onClose: () => void;
+	defaultValues?: Todo;
 } & ModalProps;
 
-export const CreateTodoForm = (props: CreateTodoFormProps) => {
-	const { userId, onSubmit, onClose, onBackdropClick, ...rest } = props;
+export const TodoForm = (props: TodoFormProps) => {
+	const {
+		title,
+		userId,
+		onSubmit,
+		onClose,
+		onBackdropClick,
+		defaultValues,
+		...rest
+	} = props;
 
 	const form = useForm<CreateTodo>({
 		resolver: zodResolver(createTodoValidator),
-		defaultValues: {
+		defaultValues: defaultValues ?? {
 			title: '',
 			body: '',
 			user_id: userId,
@@ -29,18 +39,14 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
 	});
 
 	const handleSubmit = async (newTodo: CreateTodo) => {
-		try {
-			await onSubmit(newTodo);
-			form.reset();
-		} catch (error) {
-			console.error(error);
-		}
+		await onSubmit(newTodo);
+		form.reset();
 	};
 
 	return (
 		<Modal {...rest} onSubmit={form.handleSubmit(handleSubmit)}>
 			<Modal.Header>
-				<Modal.Title>Create Todo Form</Modal.Title>
+				<Modal.Title>{title || 'Todo Form'}</Modal.Title>
 			</Modal.Header>
 			<Form onSubmit={form.handleSubmit(onSubmit)}>
 				<Modal.Body className="d-flex flex-column gap-3">
@@ -104,7 +110,7 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
 						variant="primary"
 						type="submit"
 					>
-						Create Todo
+						Submit
 					</Button>
 				</Modal.Footer>
 			</Form>
