@@ -2,8 +2,6 @@
 
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
-import { idValidator } from '@/features/shared/validators/id-validator';
-import { TodoModel } from '../models/todo-model';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { deleteTodoService } from '../services/delete-todo-service';

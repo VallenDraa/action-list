@@ -1,6 +1,8 @@
+import 'server-only';
+
 import { idValidator } from '@/features/shared/validators/id-validator';
 import { TodoModel } from '../models/todo-model';
-import { Todo, UpdateTodo } from '../types/todo-type';
+import { UpdateTodo } from '../types/todo-type';
 import { todoValidator } from '../validators/todo-validator';
 
 export const editTodoService = async (todoId: string, todo: UpdateTodo) => {

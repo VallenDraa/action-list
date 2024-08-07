@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { idValidator } from '@/features/shared/validators/id-validator';
 import { TodoModel } from '../models/todo-model';
 

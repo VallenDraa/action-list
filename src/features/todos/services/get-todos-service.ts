@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { generatePages } from '@/features/shared/utils/generate-pages';
 import { TodoModel } from '../models/todo-model';
 import { GetTodosActionQuery } from '../types/get-todos-type';

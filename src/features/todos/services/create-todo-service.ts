@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { TodoModel } from '../models/todo-model';
 import { CreateTodo } from '../types/todo-type';
 import { createTodoValidator } from '../validators/todo-validator';
