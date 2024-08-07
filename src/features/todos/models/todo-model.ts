@@ -6,8 +6,7 @@ const TodoSchema = new mongoose.Schema<Todo>(
 		title: { type: String, required: true },
 		body: { type: String, required: true },
 		user_id: { type: String, required: true },
-		is_done: { type: Boolean, required: true, default: false },
-		is_archived: { type: Boolean, required: true, default: false },
+		status: { type: String, required: true, default: 'upcoming' },
 	},
 	{ timestamps: true },
 );

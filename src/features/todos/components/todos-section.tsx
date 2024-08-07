@@ -4,15 +4,16 @@ import { useDataQuery } from '@/features/todos/hooks/data-query/use-data-query';
 import { TodoList } from './todo-list';
 import { TodoSearchBar } from './todo-search-bar';
 import { TodoItem } from './todo-item';
-import { TodoTypeFilter } from './todo-type-filter';
-import { TodoFilter } from '../types/get-todos-type';
+import { TodoStatus } from '../types/todo-type';
 import { Col } from 'react-bootstrap';
 import { useUpdateTodo } from '../hooks/use-update-todo';
-import { useTodoFilterType } from '../hooks/use-todo-filter-type';
 import { Paginations } from '@/features/shared/components/ui/paginations';
 import { useGetPaginatedTodos } from '../hooks/use-get-paginated-todos';
 import { CreateTodoButton } from './create-todo-button';
 import React from 'react';
+import { useTodoStatusFilter } from '../hooks/use-todo-status-filter';
+import { TodoFilter } from '../types/get-todos-type';
+import { TodoStatusFilterPicker } from './todo-status-filter-picker';
 
 export type TodosSectionProps = {
 	userId: string;
@@ -21,10 +22,15 @@ export type TodosSectionProps = {
 export const TodosSection = (props: TodosSectionProps) => {
 	const { userId } = props;
 
-	const { todoType, setTodoType } = useTodoFilterType();
 	const { dataQuery, setDataQuery } = useDataQuery();
 	const handleSearchQueryChange = (newSearch: string) => {
 		setDataQuery(prev => ({ ...prev, search: newSearch }));
+	};
+
+	const { todoStatus, setTodoStatus } = useTodoStatusFilter();
+	const handleTodoStatus = (newStatus: TodoFilter) => {
+		setDataQuery(prev => ({ ...prev, page: 1 }));
+		setTodoStatus(newStatus);
 	};
 
 	const {
@@ -33,7 +39,7 @@ export const TodosSection = (props: TodosSectionProps) => {
 		totalPages,
 	} = useGetPaginatedTodos(userId, {
 		...dataQuery,
-		type: todoType as TodoFilter,
+		type: todoStatus as TodoFilter,
 	});
 	const { handleDeleteTodo, handleEditTodo } = useUpdateTodo(userId, dataQuery);
 
@@ -45,9 +51,9 @@ export const TodosSection = (props: TodosSectionProps) => {
 					onChange={handleSearchQueryChange}
 				/>
 
-				<TodoTypeFilter
-					activeFilter={todoType as TodoFilter}
-					onChange={setTodoType}
+				<TodoStatusFilterPicker
+					activeType={todoStatus as TodoFilter}
+					onChange={handleTodoStatus}
 				/>
 			</div>
 
@@ -63,9 +69,8 @@ export const TodosSection = (props: TodosSectionProps) => {
 							<TodoItem
 								todo={todo}
 								onDelete={handleDeleteTodo}
-								onToggleArchive={handleEditTodo}
-								onToggleDone={handleEditTodo}
 								onEdit={handleEditTodo}
+								onTypeChange={status => handleEditTodo({ ...todo, status })}
 							/>
 						</Col>
 					))}

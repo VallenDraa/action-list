@@ -6,16 +6,7 @@ export const getTodosService = async (
 	userId: string,
 	{ limit = 8, page = 1, search = '', type = 'all' }: GetTodosActionQuery,
 ) => {
-	const allUserTodosLength = await TodoModel.countDocuments({
-		user_id: userId,
-	});
-
-	const todoTypeQuery =
-		type === 'all'
-			? {}
-			: { is_archived: type === 'archived', is_done: type === 'done' };
-
-	const todos = await TodoModel.find({
+	const todosQuery = {
 		user_id: userId,
 		$and: [
 			{
@@ -24,9 +15,12 @@ export const getTodosService = async (
 					{ description: { $regex: search, $options: 'i' } },
 				],
 			},
-			todoTypeQuery,
+			type === 'all' ? {} : { status: type },
 		],
-	})
+	};
+
+	const allUserTodosLength = await TodoModel.countDocuments(todosQuery);
+	const todos = await TodoModel.find(todosQuery)
 		.limit(limit ?? 8)
 		.skip((page - 1) * limit)
 		.lean();

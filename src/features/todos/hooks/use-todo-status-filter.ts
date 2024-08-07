@@ -5,17 +5,17 @@ import { parseAsString, useQueryState } from 'nuqs';
 import { TODO_FILTERS } from '../constants/todo-filter';
 import { TodoFilter } from '../types/get-todos-type';
 
-export const useTodoFilterType = () => {
-	const [todoType, setTodoType] = useQueryState(
-		'type',
+export const useTodoStatusFilter = () => {
+	const [todoStatus, setTodoStatus] = useQueryState(
+		'status',
 		parseAsString.withDefault('all'),
 	);
 
 	React.useEffect(() => {
-		if (!TODO_FILTERS.includes(todoType as TodoFilter)) {
-			setTodoType('all');
+		if (!TODO_FILTERS.includes(todoStatus as TodoFilter)) {
+			setTodoStatus('all');
 		}
-	}, [todoType, setTodoType]);
+	}, [todoStatus, setTodoStatus]);
 
-	return { todoType, setTodoType };
+	return { todoStatus, setTodoStatus };
 };

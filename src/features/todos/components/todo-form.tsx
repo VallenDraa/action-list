@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createTodoValidator } from '@/features/todos/validators/todo-validator';
 import { Form } from 'react-bootstrap';
+import { TODO_STATUS } from '../constants/todo-status';
 
 export type TodoFormProps = {
 	title?: string;
@@ -33,8 +34,7 @@ export const TodoForm = (props: TodoFormProps) => {
 			title: '',
 			body: '',
 			user_id: userId,
-			is_done: false,
-			is_archived: false,
+			status: 'upcoming',
 		},
 	});
 
@@ -81,18 +81,16 @@ export const TodoForm = (props: TodoFormProps) => {
 
 					<Form.Group
 						className="d-flex flex-column gap-2"
-						controlId="Todo archived and done status switch"
+						controlId="Todo status"
 					>
-						<Form.Check
-							{...form.register('is_archived')}
-							type="switch"
-							label="Archived Todo"
-						/>
-						<Form.Check
-							{...form.register('is_done')}
-							type="switch"
-							label="Todo Done"
-						/>
+						<Form.Label>Status</Form.Label>
+						<Form.Select {...form.register('status')}>
+							{TODO_STATUS.map(filter => (
+								<option value={filter} key={filter}>
+									{filter}
+								</option>
+							))}
+						</Form.Select>
 					</Form.Group>
 				</Modal.Body>
 				<Modal.Footer>

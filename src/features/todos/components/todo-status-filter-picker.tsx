@@ -4,24 +4,24 @@ import { Dropdown } from 'react-bootstrap';
 import { TODO_FILTERS } from '../constants/todo-filter';
 import { TodoFilter } from '../types/get-todos-type';
 
-export type TodoTypeFilterProps = {
-	activeFilter: TodoFilter;
+export type TodoStatusFilterPickerProps = {
+	activeType: TodoFilter;
 	onChange: (filter: TodoFilter) => void;
 };
 
-export const TodoTypeFilter = (props: TodoTypeFilterProps) => {
-	const { activeFilter, onChange } = props;
+export const TodoStatusFilterPicker = (props: TodoStatusFilterPickerProps) => {
+	const { activeType, onChange } = props;
 
 	return (
 		<Dropdown align="end">
-			<Dropdown.Toggle variant="primary">{activeFilter}</Dropdown.Toggle>
+			<Dropdown.Toggle variant="primary">{activeType}</Dropdown.Toggle>
 
 			<Dropdown.Menu>
 				{TODO_FILTERS.map(filter => (
 					<Dropdown.Item
 						key={filter}
 						as="button"
-						active={activeFilter === filter}
+						active={activeType === filter}
 						onClick={() => onChange(filter)}
 					>
 						{filter}
