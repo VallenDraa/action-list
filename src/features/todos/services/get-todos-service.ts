@@ -1,40 +1,35 @@
+import { generatePages } from '@/features/shared/utils/generate-pages';
 import { TodoModel } from '../models/todo-model';
 import { GetTodosActionQuery } from '../types/get-todos-type';
 
 export const getTodosService = async (
 	userId: string,
-	getTodosQuery: GetTodosActionQuery,
+	{ limit = 8, page = 1, search = '', type = 'all' }: GetTodosActionQuery,
 ) => {
 	const allUserTodosLength = await TodoModel.countDocuments({
 		user_id: userId,
 	});
 
-	let query: any = {
+	const todoTypeQuery =
+		type === 'all'
+			? {}
+			: { is_archived: type === 'archived', is_done: type === 'done' };
+
+	const todos = await TodoModel.find({
 		user_id: userId,
 		$and: [
 			{
 				$or: [
-					{ title: { $regex: getTodosQuery.search, $options: 'i' } },
-					{ description: { $regex: getTodosQuery.search, $options: 'i' } },
+					{ title: { $regex: search, $options: 'i' } },
+					{ description: { $regex: search, $options: 'i' } },
 				],
 			},
+			todoTypeQuery,
 		],
-	};
-
-	switch (getTodosQuery.type) {
-		case 'done':
-			query.$and.push({ is_done: true, is_archived: false });
-			break;
-		case 'archived':
-			query.$and.push({ is_archived: true, is_done: false });
-			break;
-
-		case 'all':
-		default:
-			break;
-	}
-
-	const todos = await TodoModel.find(query).lean();
+	})
+		.limit(limit ?? 8)
+		.skip((page - 1) * limit)
+		.lean();
 
 	return {
 		todos: todos.map(todo => {
@@ -44,5 +39,11 @@ export const getTodosService = async (
 			return todo;
 		}),
 		totalData: allUserTodosLength,
+		pages: generatePages({
+			visiblePages: 5,
+			currentLimit: limit,
+			currentPage: page,
+			totalPages: Math.ceil(allUserTodosLength / limit),
+		}),
 	};
 };

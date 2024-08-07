@@ -15,14 +15,19 @@ import { getTodosService } from '../services/get-todos-service';
 
 export async function getTodosAction(
 	userId: string,
-	{ limit = 10, page = 1, search = '', type = 'all' }: GetTodosActionQuery,
-): Promise<PaginatedResponse<{ todos: Todo[] }> | Response<null>> {
+	{ limit = 8, page = 1, search = '', type = 'all' }: GetTodosActionQuery,
+): Promise<PaginatedResponse<{ todos: Todo[] } | null>> {
 	try {
 		await dbConnect();
 
 		const { session } = await validateRequest();
 		if (!session) {
-			return { ok: false, message: 'Unauthorized', data: null };
+			return {
+				ok: false,
+				message: 'Unauthorized',
+				data: null,
+				pagination: { limit, page, totalData: 0, totalPages: 0, pages: [] },
+			};
 		}
 
 		const validatedUserId = await idValidator.parseAsync(userId);
@@ -33,7 +38,7 @@ export async function getTodosAction(
 			type,
 		});
 
-		const { todos, totalData } = await getTodosService(
+		const { todos, totalData, pages } = await getTodosService(
 			validatedUserId,
 			validatedQuery,
 		);
@@ -43,6 +48,7 @@ export async function getTodosAction(
 			message: 'Todos fetched successfully.',
 			data: { todos },
 			pagination: {
+				pages,
 				limit,
 				page,
 				totalData,
@@ -50,6 +56,11 @@ export async function getTodosAction(
 			},
 		};
 	} catch (error) {
-		return { ok: false, message: getErrorMessage(error), data: null };
+		return {
+			ok: false,
+			message: getErrorMessage(error),
+			data: null,
+			pagination: { limit, page, totalData: 0, totalPages: 0, pages: [] },
+		};
 	}
 }

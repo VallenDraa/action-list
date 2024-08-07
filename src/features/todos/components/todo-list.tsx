@@ -1,15 +1,17 @@
-import Row from 'react-bootstrap/Row';
 import React from 'react';
+import Row from 'react-bootstrap/Row';
+import clsx from 'clsx';
 
 export type TodoListProps = {
 	children: React.ReactNode;
+	className?: string;
 };
 
 export const TodoList = (props: TodoListProps) => {
-	const { children } = props;
+	const { children, className } = props;
 
 	return (
-		<Row as="ul" className="g-2 list-unstyled">
+		<Row as="ul" className={clsx('g-2 list-unstyled ', className)}>
 			{children}
 		</Row>
 	);

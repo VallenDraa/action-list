@@ -10,13 +10,13 @@ export default async function ActiveTodosPage({
 }: {
 	searchParams: Record<string, string | string[] | undefined>;
 }) {
-	const { limit, page, search } = dataQueryParamsCache.parse(searchParams);
+	const { page, search } = dataQueryParamsCache.parse(searchParams);
 	const { user } = await validateRequestWithRedirect();
 
 	const queryClient = getQueryClient();
 	await prefetchGetTodos(queryClient, {
 		userId: user.id.toString(),
-		todosSearchQuery: { limit, page, search, type: 'all' },
+		todosSearchQuery: { page, search, type: 'all' },
 	});
 
 	const stringUserId = user.id.toString();

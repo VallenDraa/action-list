@@ -1,7 +1,6 @@
 'use client';
 
 import { useDataQuery } from '@/features/todos/hooks/data-query/use-data-query';
-import { useGetTodos } from '../query/get-todos-query';
 import { TodoList } from './todo-list';
 import { TodoSearchBar } from './todo-search-bar';
 import { TodoItem } from './todo-item';
@@ -10,6 +9,10 @@ import { TodoFilter } from '../types/get-todos-type';
 import { Col } from 'react-bootstrap';
 import { useUpdateTodo } from '../hooks/use-update-todo';
 import { useTodoFilterType } from '../hooks/use-todo-filter-type';
+import { Paginations } from '@/features/shared/components/ui/paginations';
+import { useGetPaginatedTodos } from '../hooks/use-get-paginated-todos';
+import { CreateTodoButton } from './create-todo-button';
+import React from 'react';
 
 export type TodosSectionProps = {
 	userId: string;
@@ -24,9 +27,13 @@ export const TodosSection = (props: TodosSectionProps) => {
 		setDataQuery(prev => ({ ...prev, search: newSearch }));
 	};
 
-	const { data } = useGetTodos({
-		userId,
-		todosSearchQuery: { ...dataQuery, type: todoType as TodoFilter },
+	const {
+		data: todosReponse,
+		pages,
+		totalPages,
+	} = useGetPaginatedTodos(userId, {
+		...dataQuery,
+		type: todoType as TodoFilter,
 	});
 	const { handleDeleteTodo, handleEditTodo } = useUpdateTodo(userId, dataQuery);
 
@@ -44,19 +51,36 @@ export const TodosSection = (props: TodosSectionProps) => {
 				/>
 			</div>
 
-			<TodoList>
-				{data?.todos.map(todo => (
-					<Col key={todo._id} sm="6" as="li" className="">
-						<TodoItem
-							todo={todo}
-							onDelete={handleDeleteTodo}
-							onToggleArchive={handleEditTodo}
-							onToggleDone={handleEditTodo}
-							onEdit={handleEditTodo}
-						/>
-					</Col>
-				))}
-			</TodoList>
+			<div className="h-100">
+				<TodoList>
+					{todosReponse?.data?.todos.map(todo => (
+						<Col
+							key={todo._id}
+							sm="6"
+							as="li"
+							style={{ height: 'fit-content' }}
+						>
+							<TodoItem
+								todo={todo}
+								onDelete={handleDeleteTodo}
+								onToggleArchive={handleEditTodo}
+								onToggleDone={handleEditTodo}
+								onEdit={handleEditTodo}
+							/>
+						</Col>
+					))}
+				</TodoList>
+			</div>
+
+			<div className="d-flex gap-2 justify-content-between">
+				<Paginations
+					currentPage={dataQuery.page}
+					pages={pages}
+					totalPages={totalPages}
+				/>
+
+				<CreateTodoButton userId={userId} />
+			</div>
 		</>
 	);
 };

@@ -34,15 +34,14 @@ export const CreateTodoButton = (props: CreateTodoButtonProps) => {
 
 	return (
 		<>
-			<div className="position-absolute end-0 bottom-0 me-2 mb-3 z-3">
-				<Button
-					onClick={() => setIsTodoFormActive(true)}
-					className="rounded-circle p-1"
-				>
-					<span className="visually-hidden">Toggle Create Todo Form</span>
-					<Plus className="fs-1" />
-				</Button>
-			</div>
+			<Button
+				onClick={() => setIsTodoFormActive(true)}
+				className="rounded-circle d-flex justify-content-center align-items-center p-1"
+				style={{ width: '2.5rem', height: '2.5rem' }}
+			>
+				<span className="visually-hidden">Toggle Create Todo Form</span>
+				<Plus className="fs-1" />
+			</Button>
 
 			<TodoForm
 				userId={userId}

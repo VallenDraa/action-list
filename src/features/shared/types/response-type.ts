@@ -5,6 +5,7 @@ export type Pagination = {
 	page: number;
 	totalData: number;
 	totalPages: number;
+	pages: number[];
 };
 
 export type PaginatedResponse<T> = Response<T> & {
