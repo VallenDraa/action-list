@@ -12,7 +12,11 @@ export const getTodosQueryOptions = (
 ) => {
 	return queryOptions({
 		queryKey: [TODOS_QUERY_KEY, todosSearchQuery],
-		queryFn: async () => await getTodosAction(userId, todosSearchQuery),
+		queryFn: async () => {
+			const response = await getTodosAction(userId, todosSearchQuery);
+
+			return response.data;
+		},
 	});
 };
 
