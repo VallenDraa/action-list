@@ -1,10 +1,21 @@
 import { TodoModel } from '../models/todo-model';
-import { UpdateTodo } from '../types/todo-type';
+import { Todo, UpdateTodo } from '../types/todo-type';
 
-export const editTodoService = async (todoId: string, todo: UpdateTodo) => {
+export const editTodoService = async (
+	todoId: string,
+	todo: UpdateTodo,
+): Promise<Todo | null> => {
 	const updatedTodo = await TodoModel.findByIdAndUpdate(todoId, todo, {
 		new: true,
 	}).lean();
 
-	return updatedTodo;
+	if (!updatedTodo) {
+		return null;
+	}
+
+	return {
+		...updatedTodo,
+		_id: updatedTodo._id.toString(),
+		user_id: updatedTodo.user_id.toString(),
+	};
 };

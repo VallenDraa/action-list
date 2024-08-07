@@ -1,7 +1,6 @@
 'use server';
 
 import { Response } from '@/features/shared/types/response-type';
-import { TodoModel } from '../models/todo-model';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { updateTodoValidator } from '../validators/todo-validator';
 import { Todo, UpdateTodo } from '../types/todo-type';
@@ -10,10 +9,13 @@ import { dbConnect } from '@/lib/mongoose';
 import { editTodoService } from '../services/edit-todo-service';
 import { idValidator } from '@/features/shared/validators/id-validator';
 
-export async function editTodoAction(
-	todoId: string,
-	todo: UpdateTodo,
-): Promise<Response<{ todo: Todo } | null>> {
+export async function editTodoAction({
+	todo,
+	todoId,
+}: {
+	todoId: string;
+	todo: UpdateTodo;
+}): Promise<Response<{ todo: Todo } | null>> {
 	try {
 		await dbConnect();
 

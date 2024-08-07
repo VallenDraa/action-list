@@ -31,11 +31,18 @@ export const getTodosService = async (
 
 		case 'all':
 		default:
-			query.$and.push({ is_done: true, is_archived: true });
 			break;
 	}
 
 	const todos = await TodoModel.find(query).lean();
 
-	return { todos, totalData: allUserTodosLength };
+	return {
+		todos: todos.map(todo => {
+			todo._id = todo._id.toString();
+			todo.user_id = todo.user_id.toString();
+
+			return todo;
+		}),
+		totalData: allUserTodosLength,
+	};
 };

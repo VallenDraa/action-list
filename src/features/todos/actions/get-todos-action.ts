@@ -30,6 +30,7 @@ export async function getTodosAction(
 			limit,
 			page,
 			search,
+			type,
 		});
 
 		const { todos, totalData } = await getTodosService(

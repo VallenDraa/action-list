@@ -1,16 +1,15 @@
 'use server';
 
 import { Response } from '@/features/shared/types/response-type';
-import { TodoModel } from '../models/todo-model';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
-import { todoValidator } from '../validators/todo-validator';
-import { Todo } from '../types/todo-type';
+import { createTodoValidator } from '../validators/todo-validator';
+import { CreateTodo, Todo } from '../types/todo-type';
 import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { createTodoService } from '../services/create-todo-service';
 
 export async function createTodoAction(
-	todo: Todo,
+	todo: CreateTodo,
 ): Promise<Response<{ todo: Todo } | null>> {
 	try {
 		await dbConnect();
@@ -20,10 +19,14 @@ export async function createTodoAction(
 			return { ok: false, message: 'Unauthorized', data: null };
 		}
 
-		const validatedTodo = await todoValidator.parseAsync(todo);
+		const validatedTodo = await createTodoValidator.parseAsync(todo);
 		const newTodo = await createTodoService(validatedTodo);
 
-		return { ok: true, message: 'Todo created.', data: { todo: newTodo } };
+		return {
+			ok: true,
+			message: 'Todo created.',
+			data: { todo: newTodo },
+		};
 	} catch (error) {
 		return { ok: false, message: getErrorMessage(error), data: null };
 	}

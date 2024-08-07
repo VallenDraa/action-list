@@ -1,8 +1,12 @@
 import { TodoModel } from '../models/todo-model';
-import { Todo } from '../types/todo-type';
+import { CreateTodo } from '../types/todo-type';
 
-export const createTodoService = async (todo: Todo) => {
-	const newTodo = await TodoModel.create(todo);
+export const createTodoService = async (todo: CreateTodo) => {
+	const newTodo = (await TodoModel.create(todo)).toJSON();
 
-	return newTodo;
+	return {
+		...newTodo,
+		_id: newTodo._id.toString(),
+		user_id: newTodo.user_id.toString(),
+	};
 };
