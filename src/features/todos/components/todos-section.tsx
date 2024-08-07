@@ -1,15 +1,16 @@
 'use client';
 
+import React from 'react';
+import Spinner from 'react-bootstrap/Spinner';
+import Col from 'react-bootstrap/Col';
 import { useDataQuery } from '@/features/todos/hooks/data-query/use-data-query';
 import { TodoList } from './todo-list';
 import { TodoSearchBar } from './todo-search-bar';
 import { TodoItem } from './todo-item';
-import { Col } from 'react-bootstrap';
 import { useUpdateTodo } from '../hooks/use-update-todo';
 import { Paginations } from '@/features/shared/components/ui/paginations';
 import { useGetPaginatedTodos } from '../hooks/use-get-paginated-todos';
 import { CreateTodoButton } from './create-todo-button';
-import React from 'react';
 import { useTodoStatusFilter } from '../hooks/use-todo-status-filter';
 import { TodoFilter } from '../types/get-todos-type';
 import { TodoStatusFilter } from './todo-status-filter';
@@ -33,14 +34,17 @@ export const TodosSection = (props: TodosSectionProps) => {
 	};
 
 	const {
-		data: todosReponse,
+		data: todosResponse,
 		pages,
 		totalPages,
+		isLoading,
 	} = useGetPaginatedTodos(userId, {
 		...dataQuery,
 		type: todoStatus as TodoFilter,
 	});
 	const { handleDeleteTodo, handleEditTodo } = useUpdateTodo(userId, dataQuery);
+
+	const isLoadingData = isLoading || !todosResponse;
 
 	return (
 		<>
@@ -58,21 +62,26 @@ export const TodosSection = (props: TodosSectionProps) => {
 
 			<div className="h-100">
 				<TodoList>
-					{todosReponse?.data?.todos.map(todo => (
-						<Col
-							key={todo._id}
-							sm="6"
-							as="li"
-							style={{ height: 'fit-content' }}
-						>
-							<TodoItem
-								todo={todo}
-								onDelete={handleDeleteTodo}
-								onEdit={handleEditTodo}
-								onTypeChange={status => handleEditTodo({ ...todo, status })}
-							/>
-						</Col>
-					))}
+					{isLoadingData && (
+						<Spinner className="mx-auto" animation="border" variant="primary" />
+					)}
+
+					{!isLoadingData &&
+						todosResponse?.data?.todos.map(todo => (
+							<Col
+								key={todo._id}
+								sm="6"
+								as="li"
+								style={{ height: 'fit-content' }}
+							>
+								<TodoItem
+									todo={todo}
+									onDelete={handleDeleteTodo}
+									onEdit={handleEditTodo}
+									onTypeChange={status => handleEditTodo({ ...todo, status })}
+								/>
+							</Col>
+						))}
 				</TodoList>
 			</div>
 
