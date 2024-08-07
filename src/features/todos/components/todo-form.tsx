@@ -44,11 +44,11 @@ export const TodoForm = (props: TodoFormProps) => {
 	};
 
 	return (
-		<Modal {...rest} onSubmit={form.handleSubmit(handleSubmit)}>
+		<Modal {...rest}>
 			<Modal.Header>
 				<Modal.Title>{title || 'Todo Form'}</Modal.Title>
 			</Modal.Header>
-			<Form onSubmit={form.handleSubmit(onSubmit)}>
+			<Form onSubmit={form.handleSubmit(handleSubmit)}>
 				<Modal.Body className="d-flex flex-column gap-3">
 					<Form.Group controlId="Todo title input">
 						<Form.Label>Title</Form.Label>
