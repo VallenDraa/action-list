@@ -3,6 +3,7 @@
 import { Dropdown } from 'react-bootstrap';
 import { TodoStatus } from '../types/todo-type';
 import { TODO_STATUS } from '../constants/todo-status';
+import { Tag } from 'react-bootstrap-icons';
 
 export type TodoStatusPickerProps = {
 	activeType: TodoStatus;
@@ -14,7 +15,14 @@ export const TodoStatusPicker = (props: TodoStatusPickerProps) => {
 
 	return (
 		<Dropdown align="end">
-			<Dropdown.Toggle variant="primary">{activeType}</Dropdown.Toggle>
+			<Dropdown.Toggle
+				variant="primary"
+				className="d-flex align-items-center justify-content-center gap-1"
+				style={{ textTransform: 'capitalize' }}
+			>
+				<Tag />
+				{activeType}
+			</Dropdown.Toggle>
 
 			<Dropdown.Menu>
 				{TODO_STATUS.map(status => (
@@ -23,6 +31,7 @@ export const TodoStatusPicker = (props: TodoStatusPickerProps) => {
 						as="button"
 						active={activeType === status}
 						onClick={() => onChange(status)}
+						style={{ textTransform: 'capitalize' }}
 					>
 						{status}
 					</Dropdown.Item>
