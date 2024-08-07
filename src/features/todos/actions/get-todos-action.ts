@@ -4,7 +4,7 @@ import { PaginatedResponse } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { GetTodosActionQuery } from '../types/get-todos-type';
 import { Todo } from '../types/todo-type';
-import { validateRequest } from '@/lib/lucia';
+import { mustBeAuthenticated } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { getTodosService } from '../services/get-todos-service';
 
@@ -14,11 +14,7 @@ export async function getTodosAction(
 ): Promise<PaginatedResponse<{ todos: Todo[] } | null>> {
 	try {
 		await dbConnect();
-
-		const { session } = await validateRequest();
-		if (!session) {
-			throw new Error('Unauthorized!');
-		}
+		await mustBeAuthenticated();
 
 		const { todos, totalData, totalPages, pages } = await getTodosService(
 			userId,

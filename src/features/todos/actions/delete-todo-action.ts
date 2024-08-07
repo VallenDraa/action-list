@@ -2,7 +2,7 @@
 
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
-import { validateRequest } from '@/lib/lucia';
+import { mustBeAuthenticated } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { deleteTodoService } from '../services/delete-todo-service';
 
@@ -11,12 +11,7 @@ export async function deleteTodoAction(
 ): Promise<Response<null>> {
 	try {
 		await dbConnect();
-
-		const { session } = await validateRequest();
-		if (!session) {
-			throw new Error('Unauthorized!');
-		}
-
+		await mustBeAuthenticated();
 		await deleteTodoService(todoId);
 
 		return { ok: true, message: 'Todo deleted.', data: null };

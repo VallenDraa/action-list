@@ -71,6 +71,19 @@ export const validateRequestWithRedirect = async (path = '/auth/login') => {
 	return req as { user: LuciaUser; session: Session };
 };
 
+/**
+ * Would throw an error if the user is not authenticated.
+ */
+export const mustBeAuthenticated = async () => {
+	const { session, user } = await validateRequest();
+
+	if (!session || !user) {
+		throw new Error('Unauthorized!');
+	}
+
+	return { session, user };
+};
+
 declare module 'lucia' {
 	interface Register {
 		Lucia: typeof lucia;

@@ -3,7 +3,7 @@
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
 import { CreateTodo, Todo } from '../types/todo-type';
-import { validateRequest } from '@/lib/lucia';
+import { mustBeAuthenticated, validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { createTodoService } from '../services/create-todo-service';
 
@@ -12,11 +12,7 @@ export async function createTodoAction(
 ): Promise<Response<{ todo: Todo } | null>> {
 	try {
 		await dbConnect();
-
-		const { session } = await validateRequest();
-		if (!session) {
-			throw new Error('Unauthorized!');
-		}
+		await mustBeAuthenticated();
 
 		const newTodo = await createTodoService(todo);
 
