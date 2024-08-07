@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
-import { Lucia, Session, TimeSpan, User } from 'lucia';
+import { Lucia, Session, TimeSpan, User as LuciaUser } from 'lucia';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 import { dbConnect } from './mongoose';
 import { redirect } from 'next/navigation';
+import { User } from '@/features/auth/types/user-type';
 
 export const luciaAdapter = new MongodbAdapter(
 	mongoose.connection.collection('sessions'),
@@ -17,9 +18,11 @@ export const lucia = new Lucia(luciaAdapter, {
 		expires: true,
 		attributes: { secure: process.env.NODE_ENV === 'production' },
 	},
-	getUserAttributes: (attributes: any) => {
+	getUserAttributes: attributes => {
+		const user = attributes as User;
+
 		return {
-			username: attributes.username,
+			username: user.username,
 		};
 	},
 });
@@ -65,7 +68,7 @@ export const validateRequestWithRedirect = async (path = '/auth/login') => {
 		return redirect(path);
 	}
 
-	return req as { user: User; session: Session };
+	return req as { user: LuciaUser; session: Session };
 };
 
 declare module 'lucia' {
