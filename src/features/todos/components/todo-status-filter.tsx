@@ -4,12 +4,12 @@ import { Dropdown } from 'react-bootstrap';
 import { TODO_FILTERS } from '../constants/todo-filter';
 import { TodoFilter } from '../types/get-todos-type';
 
-export type TodoStatusFilterPickerProps = {
+export type TodoStatusFilterProps = {
 	activeType: TodoFilter;
 	onChange: (filter: TodoFilter) => void;
 };
 
-export const TodoStatusFilterPicker = (props: TodoStatusFilterPickerProps) => {
+export const TodoStatusFilter = (props: TodoStatusFilterProps) => {
 	const { activeType, onChange } = props;
 
 	return (

@@ -4,7 +4,6 @@ import { useDataQuery } from '@/features/todos/hooks/data-query/use-data-query';
 import { TodoList } from './todo-list';
 import { TodoSearchBar } from './todo-search-bar';
 import { TodoItem } from './todo-item';
-import { TodoStatus } from '../types/todo-type';
 import { Col } from 'react-bootstrap';
 import { useUpdateTodo } from '../hooks/use-update-todo';
 import { Paginations } from '@/features/shared/components/ui/paginations';
@@ -13,7 +12,7 @@ import { CreateTodoButton } from './create-todo-button';
 import React from 'react';
 import { useTodoStatusFilter } from '../hooks/use-todo-status-filter';
 import { TodoFilter } from '../types/get-todos-type';
-import { TodoStatusFilterPicker } from './todo-status-filter-picker';
+import { TodoStatusFilter } from './todo-status-filter';
 
 export type TodosSectionProps = {
 	userId: string;
@@ -51,7 +50,7 @@ export const TodosSection = (props: TodosSectionProps) => {
 					onChange={handleSearchQueryChange}
 				/>
 
-				<TodoStatusFilterPicker
+				<TodoStatusFilter
 					activeType={todoStatus as TodoFilter}
 					onChange={handleTodoStatus}
 				/>
