@@ -19,14 +19,10 @@ export async function editTodoAction({
 
 		const { session } = await validateRequest();
 		if (!session) {
-			return { ok: false, message: 'Unauthorized', data: null };
+			throw new Error('Unauthorized!');
 		}
 
 		const updatedTodo = await editTodoService(todoId, todo);
-
-		if (!updatedTodo) {
-			return { ok: false, message: 'Todo not found.', data: null };
-		}
 
 		return { ok: true, message: 'Todo updated.', data: { todo: updatedTodo } };
 	} catch (error) {

@@ -24,11 +24,13 @@ export const getTodosService = async (
 		],
 	};
 
-	const allUserTodosLength = await TodoModel.countDocuments(todosQuery);
+	const totalData = await TodoModel.countDocuments(todosQuery);
 	const todos = await TodoModel.find(todosQuery)
 		.limit(limit ?? 8)
 		.skip((page - 1) * limit)
 		.lean();
+
+	const totalPages = Math.ceil(totalData / limit);
 
 	return {
 		todos: todos.map(todo => {
@@ -37,12 +39,13 @@ export const getTodosService = async (
 
 			return todo;
 		}),
-		totalData: allUserTodosLength,
+		totalData,
+		totalPages,
 		pages: generatePages({
 			visiblePages: 5,
 			currentLimit: limit,
 			currentPage: page,
-			totalPages: Math.ceil(allUserTodosLength / limit),
+			totalPages,
 		}),
 	};
 };

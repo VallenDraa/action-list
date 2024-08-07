@@ -17,32 +17,19 @@ export async function getTodosAction(
 
 		const { session } = await validateRequest();
 		if (!session) {
-			return {
-				ok: false,
-				message: 'Unauthorized',
-				data: null,
-				pagination: { limit, page, totalData: 0, totalPages: 0, pages: [] },
-			};
+			throw new Error('Unauthorized!');
 		}
 
-		const { todos, totalData, pages } = await getTodosService(userId, {
-			limit,
-			page,
-			search,
-			type,
-		});
+		const { todos, totalData, totalPages, pages } = await getTodosService(
+			userId,
+			{ limit, page, search, type },
+		);
 
 		return {
 			ok: true,
 			message: 'Todos fetched successfully.',
 			data: { todos },
-			pagination: {
-				pages,
-				limit,
-				page,
-				totalData,
-				totalPages: Math.ceil(totalData / limit),
-			},
+			pagination: { pages, limit, page, totalData, totalPages },
 		};
 	} catch (error) {
 		return {

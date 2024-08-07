@@ -3,10 +3,7 @@ import { TodoModel } from '../models/todo-model';
 import { Todo, UpdateTodo } from '../types/todo-type';
 import { todoValidator } from '../validators/todo-validator';
 
-export const editTodoService = async (
-	todoId: string,
-	todo: UpdateTodo,
-): Promise<Todo | null> => {
+export const editTodoService = async (todoId: string, todo: UpdateTodo) => {
 	await idValidator.parseAsync(todoId);
 	await todoValidator.parseAsync(todo);
 
@@ -15,7 +12,7 @@ export const editTodoService = async (
 	}).lean();
 
 	if (!updatedTodo) {
-		return null;
+		throw new Error('Todo not found or fail to update todo!');
 	}
 
 	return {

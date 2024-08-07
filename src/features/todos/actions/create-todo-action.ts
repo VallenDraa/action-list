@@ -15,16 +15,12 @@ export async function createTodoAction(
 
 		const { session } = await validateRequest();
 		if (!session) {
-			return { ok: false, message: 'Unauthorized', data: null };
+			throw new Error('Unauthorized!');
 		}
 
 		const newTodo = await createTodoService(todo);
 
-		return {
-			ok: true,
-			message: 'Todo created.',
-			data: { todo: newTodo },
-		};
+		return { ok: true, message: 'Todo created.', data: { todo: newTodo } };
 	} catch (error) {
 		return { ok: false, message: getErrorMessage(error), data: null };
 	}

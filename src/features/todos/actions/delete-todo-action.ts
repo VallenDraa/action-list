@@ -16,7 +16,7 @@ export async function deleteTodoAction(
 
 		const { session } = await validateRequest();
 		if (!session) {
-			return { ok: false, message: 'Unauthorized', data: null };
+			throw new Error('Unauthorized!');
 		}
 
 		await deleteTodoService(todoId);
