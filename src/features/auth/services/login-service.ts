@@ -1,15 +1,20 @@
+import 'server-only';
+
 import { verify } from 'argon2';
 import { UserModel } from '../models/user-model';
 import { Login } from '../types/auth-type';
 import { lucia } from '@/lib/lucia';
+import { loginValidator } from '../validators/auth-validator';
 
 export const loginService = async (loginUserData: Login) => {
+	await loginValidator.parseAsync(loginUserData);
+
 	const userResult = await UserModel.findOne({
 		username: loginUserData.username,
 	}).lean();
 
 	if (userResult === null) {
-		return null;
+		throw new Error('Invalid username or password!');
 	}
 
 	const passwordMatch = await verify(
@@ -18,7 +23,7 @@ export const loginService = async (loginUserData: Login) => {
 	);
 
 	if (!passwordMatch) {
-		return null;
+		throw new Error('Invalid username or password!');
 	}
 
 	const { password, ...user } = userResult;
@@ -26,5 +31,5 @@ export const loginService = async (loginUserData: Login) => {
 	const session = await lucia.createSession(user._id, {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 
-	return { sessionCookie, user };
+	return { sessionCookie, user: { ...user, _id: user._id.toString() } };
 };

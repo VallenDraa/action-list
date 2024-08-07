@@ -2,7 +2,7 @@
 
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
-import { lucia, validateRequest } from '@/lib/lucia';
+import { validateRequest } from '@/lib/lucia';
 import { dbConnect } from '@/lib/mongoose';
 import { cookies } from 'next/headers';
 import { logoutService } from '../services/logout-service';
@@ -13,7 +13,7 @@ export async function logoutAction(): Promise<Response<null>> {
 
 		const { session } = await validateRequest();
 		if (!session) {
-			return { ok: false, message: 'Unauthorized', data: null };
+			throw new Error('Unauthorized!');
 		}
 
 		const sessionCookie = await logoutService(session);

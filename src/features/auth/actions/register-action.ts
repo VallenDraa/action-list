@@ -19,24 +19,15 @@ export async function registerAction(
 	try {
 		await dbConnect();
 
-		const validatedData = await registerValidator.parseAsync(registerData);
-
-		const data = await registerService(validatedData);
-		if (!data) {
-			return { ok: false, message: 'Username is already used.', data: null };
-		}
+		const { user, sessionCookie } = await registerService(registerData);
 
 		cookies().set(
-			data.sessionCookie.name,
-			data.sessionCookie.value,
-			data.sessionCookie.attributes,
+			sessionCookie.name,
+			sessionCookie.value,
+			sessionCookie.attributes,
 		);
 
-		return {
-			ok: true,
-			message: 'Registration successful.',
-			data: { user: { ...data.user, _id: data.user._id.toString() } },
-		};
+		return { ok: true, message: 'Registration successful.', data: { user } };
 	} catch (error) {
 		console.error('🚀 ~ error:', error);
 		return { ok: false, message: getErrorMessage(error), data: null };

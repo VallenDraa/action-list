@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { lucia } from '@/lib/lucia';
 import { Session } from 'lucia';
 
