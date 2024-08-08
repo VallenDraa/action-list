@@ -40,38 +40,56 @@ export const TodoForm = (props: TodoFormProps) => {
 		[defaultTodo, userId],
 	);
 
-	const form = useForm<CreateTodo>({
+	const {
+		reset,
+		formState,
+		handleSubmit: formSubmit,
+		register,
+		getFieldState,
+	} = useForm<CreateTodo>({
 		resolver: zodResolver(createTodoValidator),
 		defaultValues,
 	});
 
-	const handleSubmit = async (newTodo: CreateTodo) => {
-		await onSubmit(newTodo);
+	const handleClose = () => {
+		reset(defaultValues);
+		onClose();
 	};
 
+	const handleSubmit = async (newTodo: CreateTodo) => {
+		await onSubmit(newTodo);
+
+		// Make sure is the form is always resetted no matter what
+		reset(defaultValues);
+	};
+
+	// Update default value
+	React.useEffect(() => reset(defaultValues), [defaultValues, reset]);
+
+	// Make sure is the form is always resetted no matter what
 	React.useEffect(() => {
-		if (form.formState.isSubmitSuccessful) {
-			form.reset(defaultValues);
+		if (formState.isSubmitSuccessful) {
+			reset(defaultValues);
 		}
-	}, [form, defaultValues]);
+	}, [formState.isSubmitSuccessful, reset, defaultValues]);
 
 	return (
 		<Modal {...rest}>
 			<Modal.Header>
 				<Modal.Title>{title || 'Todo Form'}</Modal.Title>
 			</Modal.Header>
-			<Form onSubmit={form.handleSubmit(handleSubmit)}>
+			<Form onSubmit={formSubmit(handleSubmit)}>
 				<Modal.Body className="d-flex flex-column gap-3">
 					<Form.Group controlId="Todo title input">
 						<Form.Label>Title</Form.Label>
 						<Form.Control
-							{...form.register('title')}
+							{...register('title')}
 							placeholder="Enter your title"
 						/>
 
-						{form.getFieldState('title').error?.message && (
+						{getFieldState('title').error?.message && (
 							<Form.Control.Feedback type="invalid">
-								{form.getFieldState('title').error?.message}
+								{getFieldState('title').error?.message}
 							</Form.Control.Feedback>
 						)}
 					</Form.Group>
@@ -79,14 +97,14 @@ export const TodoForm = (props: TodoFormProps) => {
 					<Form.Group controlId="Todo body input">
 						<Form.Label>Body</Form.Label>
 						<Form.Control
-							{...form.register('body')}
+							{...register('body')}
 							as="textarea"
 							placeholder="Enter your body"
 						/>
 
-						{form.getFieldState('body').error?.message && (
+						{getFieldState('body').error?.message && (
 							<Form.Control.Feedback type="invalid">
-								{form.getFieldState('body').error?.message}
+								{getFieldState('body').error?.message}
 							</Form.Control.Feedback>
 						)}
 					</Form.Group>
@@ -96,7 +114,7 @@ export const TodoForm = (props: TodoFormProps) => {
 						controlId="Todo status"
 					>
 						<Form.Label>Status</Form.Label>
-						<Form.Select {...form.register('status')}>
+						<Form.Select {...register('status')}>
 							{TODO_STATUS.map(filter => (
 								<option value={filter} key={filter}>
 									{filter}
@@ -107,16 +125,16 @@ export const TodoForm = (props: TodoFormProps) => {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button
-						disabled={form.formState.isSubmitting}
+						disabled={formState.isSubmitting}
 						variant="secondary"
 						type="button"
-						onClick={onClose}
+						onClick={handleClose}
 					>
 						Close
 					</Button>
 					<Button
-						loading={form.formState.isSubmitting}
-						disabled={!form.formState.isValid}
+						loading={formState.isSubmitting}
+						disabled={!formState.isValid}
 						variant="primary"
 						type="submit"
 					>
