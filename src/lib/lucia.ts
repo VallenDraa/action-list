@@ -58,7 +58,7 @@ export const validateRequest = cache(async () => {
 		// Next.js throws error when attempting to set cookies when rendering page
 	}
 
-	return { user, session };
+	return { user: { ...user, id: user?.id.toString() }, session };
 });
 
 export const validateRequestWithRedirect = async (path = '/auth/login') => {
