@@ -6,7 +6,7 @@ import { createTodoValidator } from '../validators/todo-validator';
 
 export const createTodoService = async (todo: CreateTodo) => {
 	await createTodoValidator.parseAsync(todo);
-	const newTodo = (await TodoModel.create(todo)).toJSON();
+	const newTodo = (await TodoModel.create(todo)).toObject();
 
 	return {
 		...newTodo,
