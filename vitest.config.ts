@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import { config } from 'dotenv';
 
-config({ path: '/.env.test.local' });
+config({ path: '.env.test.local' });
 
 export default defineConfig({
 	plugins: [react()],
