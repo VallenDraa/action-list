@@ -2,7 +2,7 @@ import 'server-only';
 
 import { hash } from 'argon2';
 import { Register } from '../types/auth-type';
-import { isUserExists } from '../../shared/utils/is-user-exists';
+import { isUserWithUsernameExists } from '../../shared/utils/is-user-exists';
 import { UserModel } from '../models/user-model';
 import { lucia } from '@/lib/lucia';
 import { registerValidator } from '../validators/auth-validator';
@@ -10,7 +10,7 @@ import { registerValidator } from '../validators/auth-validator';
 export const registerService = async (registerUserData: Register) => {
 	await registerValidator.parseAsync(registerUserData);
 
-	const userExists = await isUserExists(registerUserData.username);
+	const userExists = await isUserWithUsernameExists(registerUserData.username);
 	if (userExists) {
 		throw new Error('Username is already used!');
 	}

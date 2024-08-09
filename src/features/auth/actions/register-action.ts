@@ -1,10 +1,5 @@
 'use server';
 
-import { UserModel } from '../models/user-model';
-import { hash } from 'argon2';
-import { registerValidator } from '../validators/auth-validator';
-import { isUserExists } from '../../shared/utils/is-user-exists';
-import { lucia } from '@/lib/lucia';
 import { cookies } from 'next/headers';
 import { Response } from '@/features/shared/types/response-type';
 import { getErrorMessage } from '@/features/shared/utils/get-error-message';
