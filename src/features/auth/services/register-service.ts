@@ -2,7 +2,7 @@ import 'server-only';
 
 import { hash } from 'argon2';
 import { Register } from '../types/auth-type';
-import { isUserExists } from '../utils/is-user-exists';
+import { isUserExists } from '../../shared/utils/is-user-exists';
 import { UserModel } from '../models/user-model';
 import { lucia } from '@/lib/lucia';
 import { registerValidator } from '../validators/auth-validator';
