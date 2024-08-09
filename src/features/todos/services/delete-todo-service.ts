@@ -5,5 +5,9 @@ import { TodoModel } from '../models/todo-model';
 
 export const deleteTodoService = async (todoId: string) => {
 	await idValidator.parseAsync(todoId);
-	await TodoModel.findByIdAndDelete(todoId);
+	const deletedTodo = await TodoModel.findByIdAndDelete(todoId);
+
+	if (deletedTodo === null) {
+		throw new Error('Todo not found!');
+	}
 };
