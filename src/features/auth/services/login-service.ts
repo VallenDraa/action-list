@@ -7,7 +7,11 @@ import { lucia } from '@/lib/lucia';
 import { loginValidator } from '../validators/auth-validator';
 
 export const loginService = async (loginUserData: Login) => {
-	await loginValidator.parseAsync(loginUserData);
+	try {
+		await loginValidator.parseAsync(loginUserData);
+	} catch (error) {
+		throw new Error('Invalid username or password!');
+	}
 
 	const userResult = await UserModel.findOne({
 		username: loginUserData.username,
