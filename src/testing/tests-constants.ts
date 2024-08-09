@@ -26,11 +26,6 @@ export const VALID_TODO: Todo = {
 	status: 'done',
 };
 
-export const VALID_CREATE_USER: Register = {
-	username: 'john',
-	password: 'test1234',
-};
-
 export const USERNAME_TOO_SHORT_CREATE_USER: Register = {
 	username: 'jo',
 	password: 'test1234',

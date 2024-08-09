@@ -3,24 +3,26 @@ import {
 	INVALID_PASSWORD_CREATE_USER,
 	USERNAME_TOO_LONG_CREATE_USER,
 	USERNAME_TOO_SHORT_CREATE_USER,
-	VALID_CREATE_USER,
 } from '@/testing/tests-constants';
 import { registerService } from '../register-service';
 import { getTestErrorMessage } from '@/testing/tests-utils';
+import { makeValidCreateUser } from '@/testing/db/users';
 
 describe('Register Service', () => {
+	const validUser = makeValidCreateUser('registerServiceUser');
+
 	describe('Valid', () => {
 		it('Should register a new user and return user data with the session cookie', async () => {
-			const { user, sessionCookie } = await registerService(VALID_CREATE_USER);
+			const { user, sessionCookie } = await registerService(validUser);
 
-			expect(user.username).toStrictEqual(VALID_CREATE_USER.username);
+			expect(user.username).toStrictEqual(validUser.username);
 			expect(sessionCookie).toBeDefined();
 		});
 	});
 
 	describe('Invalid', () => {
 		it('Should throw an error when username is taken', async () => {
-			await expect(registerService(VALID_CREATE_USER)).rejects.toThrowError(
+			await expect(registerService(validUser)).rejects.toThrowError(
 				'Username is already used!',
 			);
 		});
@@ -64,7 +66,6 @@ describe('Register Service', () => {
 				await registerService(INVALID_CREATE_USER);
 			} catch (error) {
 				const message = getTestErrorMessage(error);
-				console.log('🚀 ~ it ~ message:', message);
 
 				expect(message).toStrictEqual(
 					`Username must be atleast 3 characters long.
