@@ -19,10 +19,10 @@ describe('Create Todo Service', () => {
 				);
 
 				expect(_id).toBeDefined();
-				expect(body).toBe(todo.body);
-				expect(title).toBe(todo.title);
-				expect(status).toBe(todo.status);
-				expect(user_id).toBe(todo.user_id);
+				expect(body).toStrictEqual(todo.body);
+				expect(title).toStrictEqual(todo.title);
+				expect(status).toStrictEqual(todo.status);
+				expect(user_id).toStrictEqual(todo.user_id);
 			},
 		);
 	});
