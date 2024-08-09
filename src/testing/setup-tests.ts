@@ -37,7 +37,7 @@ beforeAll(() => {
 
 beforeAll(async () => {
 	const mongoConnection = await dbConnect({ uri: process.env.MONGO_URI });
-	resetTestDb(mongoConnection);
+	await resetTestDb(mongoConnection, 'all');
 });
 
 afterEach(() => {
