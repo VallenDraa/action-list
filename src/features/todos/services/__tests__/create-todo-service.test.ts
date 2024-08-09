@@ -11,9 +11,9 @@ describe('Create Todo Service', () => {
 	}));
 
 	describe('Valid', () => {
-		it.each(todos)(
+		it.each(todos.map(todo => [todo.status, todo]))(
 			'Should create a new todo when inputs are valid and status is %s',
-			async todo => {
+			async (_status, todo) => {
 				const { body, _id, status, title, user_id } = await createTodoService(
 					todo,
 				);
