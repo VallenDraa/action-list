@@ -5,6 +5,7 @@ import { TodoModel } from '../models/todo-model';
 import { GetTodosActionQuery } from '../types/get-todos-type';
 import { idValidator } from '@/features/shared/validators/id-validator';
 import { getTodoValidator } from '../validators/get-todos-validator';
+import { isUserWithIdExists } from '@/features/shared/utils/is-user-exists';
 
 export const getTodosService = async (
 	userId: string,
@@ -12,6 +13,11 @@ export const getTodosService = async (
 ) => {
 	await idValidator.parseAsync(userId);
 	await getTodoValidator.parseAsync({ limit, page, search, type });
+
+	const isUserExists = await isUserWithIdExists(userId);
+	if (!isUserExists) {
+		throw new Error('User not found');
+	}
 
 	const todosQuery = {
 		user_id: userId,

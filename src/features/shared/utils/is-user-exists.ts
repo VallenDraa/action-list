@@ -5,3 +5,9 @@ export const isUserWithUsernameExists = async (username: string) => {
 
 	return isExists !== null;
 };
+
+export const isUserWithIdExists = async (_id: string) => {
+	const isExists = await UserModel.exists({ _id });
+
+	return isExists !== null;
+};
