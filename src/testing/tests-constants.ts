@@ -1,5 +1,6 @@
 import { Register } from '@/features/auth/types/auth-type';
 import { CreateTodo, Todo } from '@/features/todos/types/todo-type';
+import mongoose from 'mongoose';
 
 export const INVALID_TODO: Todo = {
 	_id: '1',
@@ -10,26 +11,26 @@ export const INVALID_TODO: Todo = {
 };
 
 export const EMPTY_TODO: Todo = {
-	_id: crypto.randomUUID(),
+	_id: new mongoose.Types.ObjectId().toString(),
 	title: '',
 	body: '',
-	user_id: crypto.randomUUID(),
+	user_id: new mongoose.Types.ObjectId().toString(),
 	status: 'upcoming',
 };
 
 export const VALID_TODO: Todo = {
 	// Simulate mongodb ObjectId
-	_id: crypto.randomUUID(),
+	_id: new mongoose.Types.ObjectId().toString(),
 	title: 'Hello',
 	body: 'body',
-	user_id: crypto.randomUUID(),
+	user_id: new mongoose.Types.ObjectId().toString(),
 	status: 'done',
 };
 
 export const VALID_CREATE_TODO: CreateTodo = {
 	title: 'Hello',
 	body: 'body',
-	user_id: crypto.randomUUID(),
+	user_id: new mongoose.Types.ObjectId().toString(),
 	status: 'done',
 };
 
