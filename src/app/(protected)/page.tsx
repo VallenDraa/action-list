@@ -5,7 +5,7 @@ import { validateRequestWithRedirect } from '@/lib/lucia';
 import { getQueryClient } from '@/lib/react-query';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-export default async function ActiveTodosPage({
+export default async function TodosPage({
 	searchParams,
 }: {
 	searchParams: Record<string, string | string[] | undefined>;
