@@ -1,10 +1,9 @@
 import { afterEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { resetTestDb } from './db';
 import { dbConnect } from '@/lib/mongoose';
 
-beforeAll(() => {
+beforeAll(async () => {
 	// Mocking Next.js and React specific modules and libraries
 	vi.mock('server-only', () => {
 		return {};
@@ -33,11 +32,8 @@ beforeAll(() => {
 	// 		}),
 	// 	};
 	// });
-});
 
-beforeAll(async () => {
-	const mongoConnection = await dbConnect({ uri: process.env.MONGO_URI });
-	await resetTestDb(mongoConnection, 'all');
+	await dbConnect({ uri: process.env.MONGO_URI });
 });
 
 afterEach(() => {

@@ -7,9 +7,14 @@ import {
 import { registerService } from '../register-service';
 import { getTestErrorMessage } from '@/testing/tests-utils';
 import { makeValidCreateUser } from '@/testing/db/users';
+import { UserModel } from '../../models/user-model';
 
 describe('Register Service', () => {
 	const validUser = makeValidCreateUser('registerServiceUser');
+
+	afterAll(async () => {
+		await UserModel.deleteOne({ username: validUser.username });
+	});
 
 	describe('Valid', () => {
 		it('Should register a new user and return user data with the session cookie', async () => {

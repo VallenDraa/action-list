@@ -1,18 +1,20 @@
-import { dbConnect } from '@/lib/mongoose';
-import { resetTestDb } from '@/testing/db';
 import { createTodoService } from '../create-todo-service';
 import { VALID_CREATE_TODO } from '@/testing/tests-constants';
 import { deleteTodoService } from '../delete-todo-service';
 import mongoose from 'mongoose';
+import { TodoModel } from '../../models/todo-model';
 
 describe('Delete Todo Service', () => {
 	let todoId: string;
 
 	beforeAll(async () => {
-		await resetTestDb(await dbConnect({ uri: process.env.MONGO_URI! }));
 		const newTodo = await createTodoService(VALID_CREATE_TODO);
 
 		todoId = newTodo._id;
+	});
+
+	afterAll(async () => {
+		await TodoModel.deleteOne({ _id: todoId });
 	});
 
 	describe('Valid', () => {

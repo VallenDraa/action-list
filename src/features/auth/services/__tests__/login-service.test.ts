@@ -4,17 +4,19 @@ import {
 	INVALID_PASSWORD_CREATE_USER,
 } from '@/testing/tests-constants';
 import { loginService } from '../login-service';
-import { resetTestDb } from '@/testing/db';
-import { dbConnect } from '@/lib/mongoose';
 import { registerService } from '../register-service';
 import { makeValidCreateUser } from '@/testing/db/users';
+import { UserModel } from '../../models/user-model';
 
 describe('Login Service', async () => {
 	const validUser = makeValidCreateUser('loginServiceUser');
 
 	beforeAll(async () => {
-		await resetTestDb(await dbConnect({ uri: process.env.MONGO_URI! }));
 		await registerService(validUser);
+	});
+
+	afterAll(async () => {
+		await UserModel.deleteOne({ username: validUser.username });
 	});
 
 	describe('Valid', () => {
