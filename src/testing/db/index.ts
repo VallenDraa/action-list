@@ -17,3 +17,5 @@ export const resetTestDb = async (
 
 	await Promise.allSettled(dropCollectionStatements);
 };
+
+export const createObjectId = () => new mongoose.Types.ObjectId();

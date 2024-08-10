@@ -7,6 +7,11 @@ import { idValidator } from '@/features/shared/validators/id-validator';
 import { getTodoValidator } from '../validators/get-todos-validator';
 import { isUserWithIdExists } from '@/features/shared/utils/is-user-exists';
 
+/**
+ * @param {string} userId
+ * @param {GetTodosActionQuery} todoQuery
+ * @returns Paginated list of todos based on the given query. On default it will return 8 todos per page.
+ */
 export const getTodosService = async (
 	userId: string,
 	{ limit = 8, page = 1, search = '', type = 'all' }: GetTodosActionQuery,
@@ -16,7 +21,7 @@ export const getTodosService = async (
 
 	const isUserExists = await isUserWithIdExists(userId);
 	if (!isUserExists) {
-		throw new Error('User not found');
+		throw new Error('User not found!');
 	}
 
 	const todosQuery = {
@@ -38,7 +43,7 @@ export const getTodosService = async (
 		.skip((page - 1) * limit)
 		.lean();
 
-	const totalPages = Math.ceil(totalData / limit);
+	const totalPages = Math.ceil(totalData / limit) || 1;
 
 	return {
 		todos: todos.map(todo => {
