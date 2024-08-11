@@ -1,5 +1,6 @@
 import { render, screen, userEvent, waitFor } from '@/testing/tests-utils';
 import { TodoSearchBar } from '../todo-search-bar';
+import { describe, it, expect, vi } from 'vitest';
 
 describe('<TodoSearchBar/> Component', () => {
 	describe('Render', () => {

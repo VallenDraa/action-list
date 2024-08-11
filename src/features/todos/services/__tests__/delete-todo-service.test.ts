@@ -3,6 +3,7 @@ import { VALID_CREATE_TODO } from '@/testing/tests-constants';
 import { deleteTodoService } from '../delete-todo-service';
 import mongoose from 'mongoose';
 import { TodoModel } from '../../models/todo-model';
+import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 
 describe('Delete Todo Service', () => {
 	let todoId: string;

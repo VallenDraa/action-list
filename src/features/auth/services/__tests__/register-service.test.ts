@@ -8,6 +8,7 @@ import { registerService } from '../register-service';
 import { getTestErrorMessage } from '@/testing/tests-utils';
 import { makeValidCreateUser } from '@/testing/db/users';
 import { UserModel } from '../../models/user-model';
+import { describe, it, expect, afterAll } from 'vitest';
 
 describe('Register Service', () => {
 	const validUser = makeValidCreateUser('registerServiceUser');

@@ -2,6 +2,7 @@ import { screen, render, userEvent } from '@/testing/tests-utils';
 import { RegisterForm } from '../register-form';
 import { registerAction } from '../../actions/register-action';
 import { useRouter } from 'next/navigation';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 
 vi.mock('../../actions/register-action', () => ({
 	registerAction: vi.fn(),

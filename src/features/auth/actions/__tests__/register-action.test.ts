@@ -1,3 +1,5 @@
+import { describe, it } from 'vitest';
+
 describe('Register Action', () => {
 	describe('Valid', () => {
 		it.todo('Should register a new user');

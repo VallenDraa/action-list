@@ -1,7 +1,7 @@
-import { afterEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { dbConnect } from '@/lib/mongoose';
+import { beforeAll, afterAll, afterEach, vi } from 'vitest';
 
 beforeAll(async () => {
 	// Mocking Next.js and React specific modules and libraries

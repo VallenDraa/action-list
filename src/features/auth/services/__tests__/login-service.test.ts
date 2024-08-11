@@ -7,6 +7,7 @@ import { loginService } from '../login-service';
 import { registerService } from '../register-service';
 import { makeValidCreateUser } from '@/testing/db/users';
 import { UserModel } from '../../models/user-model';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('Login Service', async () => {
 	const validUser = makeValidCreateUser('loginServiceUser');
